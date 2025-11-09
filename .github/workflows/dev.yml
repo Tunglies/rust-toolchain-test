@@ -1,0 +1,26 @@
+name: Manual Rust Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust Stable
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.91.0"
+          targets: ${{ matrix.target }}
+
+      - name: Build
+        run: cargo build --target ${{ matrix.target }} --verbose
